@@ -7,7 +7,7 @@ void f3(char sign, int side_a);
 
 int main(void)
 {
-    setlocale(LC_ALL, "RU_ru.utf8");
+    setlocale(LC_ALL, ".UTF-8");
 
     printf("--- Задание 1 ---\n\n");
 
