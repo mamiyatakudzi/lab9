@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <locale.h>
 
-void f3(char sign, int side_a);
+char f3(char sign, int side_a, int i, int j);
 
 int main(void)
 {
@@ -11,12 +11,24 @@ int main(void)
 
     printf("--- Задание 1 ---\n\n");
 
+    for (int row = 1; row <= 9; ++row)
+    {
+        for (int col = 1; col <= 9; ++col)
+        {
+            printf("%4d", row * col);
+        }
+        printf("\n");
+    }
+    printf("\n");
+
     int row, col;
     for (row = 1; row <= 5; ++row)
     {
-        for (col = 1; col <= row; ++col)
         {
-            printf("%5d", row * 5);
+            for (col = 1; col <= row; ++col)
+            {
+                printf("%5d", row * 5);
+            }
         }
         printf("\n");
     }
@@ -45,9 +57,7 @@ int main(void)
         while (temp > 0)
         {
             current_digit = temp % 10;
-
             sum_even_except_last += current_digit * (1 - (current_digit % 2));
-
             temp = temp / 10;
         }
 
@@ -63,55 +73,53 @@ int main(void)
 
     printf("--- Задание 3 ---\n\n");
 
-    char sign;
-    int side_a;
+    do
+    {
+        char sign;
+        int side_a;
 
-    printf("Введите символ для построения фигуры: ");
-    while (getchar() != '\n');
-    scanf("%c", &sign);
+        printf("Введите символ для построения фигуры: ");
+        while (getchar() != '\n');
+        scanf("%c", &sign);
 
-    printf("Введите размер стороны 'a': ");
-    scanf("%d", &side_a);
+        do {
+            printf("Введите размер стороны 'a': ");
+            if (scanf("%d", &side_a) != 1 || side_a <= 0) {
+                printf("Ошибка! Введите положительное число.\n");
+                while (getchar() != '\n');
+            }
+            else {
+                break;
+            }
+        } while (1);
 
-    printf("Контур фигуры (перевернутый прямоугольный треугольник):\n\n");
-    f3(sign, side_a);
+        printf("Контур фигуры (перевернутый прямоугольный треугольник):\n\n");
+
+        int line_width = side_a * 2 - 1;
+        for (int i = 0; i < side_a; i++)
+        {
+            for (int j = 0; j < line_width; j++)
+            {
+                printf("%c", f3(sign, side_a, i, j));
+            }
+            printf("\n");
+        }
+
+        while (getchar() != '\n');
+
+        printf("\nПовторить рисунок? (y/n): ");
+        scanf("%c", &repeat);
+        printf("\n");
+
+    } while (repeat == 'y' || repeat == 'Y');
 
     system("pause");
     return 0;
 }
 
-void f3(char sign, int side_a)
+char f3(char sign, int side_a, int i, int j)
 {
-    int i, j;
-
     int line_width = side_a * 2 - 1;
-    for (j = 0; j < line_width; j++)
-    {
-        printf("%c", sign);
-    }
-    printf("\n");
 
-    for (i = 1; i < side_a - 1; i++)
-    {
-        for (j = 0; j < i; j++)
-        {
-            printf(" ");
-        }
-
-        printf("%c", sign);
-
-        int spaces = (side_a - i - 1) * 2 - 1;
-        for (j = 0; j < spaces; j++)
-        {
-            printf(" ");
-        }
-
-        printf("%c\n", sign);
-    }
-
-    for (j = 0; j < side_a - 1; j++)
-    {
-        printf(" ");
-    }
-    printf("%c\n", sign);
+    return (i == 0 || (i == side_a - 1 && j == side_a - 1) || j == i || j == (line_width - 1 - i)) ? sign : ' ';
 }
